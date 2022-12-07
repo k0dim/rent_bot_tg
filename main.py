@@ -25,23 +25,28 @@ def get_text_messages(message):
     bot.send_video(message.chat.id, 'https://media.tenor.com/e55q1Aor1yoAAAAd/lets-work-work.gif')
     bot.send_message(message.chat.id, 'Работаем')
     text = avito_main()
-    markdown = f"""
+
+    new_dict = {
+        'name':'',
+        'href':'',
+        'price':'',
+        'geo':''
+    }
+    while True:
+        if new_dict['href'] == text['href']:
+            logger.info(f"Check dict: new_dict = text")
+            logger.info(f"Success: Сообщение НЕ отправленно")
+            text = avito_main()
+        elif new_dict['href'] != text['href']:
+            new_dict = text
+            logger.info(f"Check dict: new_dict != text")
+            markdown = f"""
 [{text['name']}]({text['href']})
 *{text['price']}*
 {text['geo']}
     """
-
-    new_dict = {}
-    while True:
-        if new_dict == text:
-            logger.info(f"Check dict: new_dict = text")
-            logger.info(f"Success: Сообщение НЕ отправленно")
-            text = avito_main()
-        elif new_dict != text:
-            logger.info(f"Check dict: new_dict != text")
             bot.send_message(message.chat.id, markdown, parse_mode="Markdown", disable_notification=True)
             logger.info(f"Success: Сообщение отправленно")
-            new_dict = text
             text = avito_main()
 
 
