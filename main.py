@@ -4,7 +4,7 @@ from datetime import datetime
 from loguru import logger
 import os
 
-bot = TeleBot('5976202984:AAHMn4Yhye3w-Mzvoombab0GuQw-Lpy-IdQ')
+bot = TeleBot('')
 
 @bot.message_handler(commands=['help'])
 def help(message):
@@ -24,36 +24,46 @@ def help(message):
 def get_text_messages(message):
     bot.send_video(message.chat.id, 'https://media.tenor.com/e55q1Aor1yoAAAAd/lets-work-work.gif')
     bot.send_message(message.chat.id, 'Работаем')
+    bot.send_message(message.chat.id, 'Как появится новое объявление - дам знать')
     text = avito_main()
 
-    new_dict = {
-        'name':'',
-        'href':'',
-        'price':'',
-        'geo':''
-    }
+    # new_dict = {
+    #     'name':'',
+    #     'href':'',
+    #     'price':'',
+    #     'geo':''
+    # }
+
+    new_dict = text
+
     while True:
-        if new_dict['href'] == text['href']:
-            logger.info(f"Check dict: new_dict = text")
-            logger.info(f"Success: Сообщение НЕ отправленно")
-            text = avito_main()
-        elif new_dict['href'] != text['href']:
-            new_dict = text
-            logger.info(f"Check dict: new_dict != text")
-            markdown = f"""
+        try:
+            logger.info(f"new_dict = {new_dict}")
+            if new_dict['href'] == text['href']:
+                logger.info(f"Check dict: new_dict = text")
+                logger.info(f"Success: Сообщение НЕ отправленно")
+                text = avito_main()
+                continue
+
+            elif new_dict['href'] != text['href']:
+                new_dict = text
+                logger.info(f"Check dict: new_dict != text")
+                markdown = f"""
 [{text['name']}]({text['href']})
 *{text['price']}*
 {text['geo']}
-    """
+"""
             bot.send_message(message.chat.id, markdown, parse_mode="Markdown", disable_notification=True)
             logger.info(f"Success: Сообщение отправленно")
             text = avito_main()
+            continue
 
+        except:
+            continue
 
 if __name__ == "__main__":
     ROAD = os.getcwd() 
     full_path_log = os.path.join(ROAD, 'log', 'file.log')
-    logger.add(full_path_log, format="{time} {level} {message}", level="INFO")
-    logger.add(full_path_log, format="{time} {level} {message}", level="DEBUG")
+    logger.add(full_path_log, format="{time} {level} {message}", level="INFO", retention="10 days")
 
     bot.infinity_polling()

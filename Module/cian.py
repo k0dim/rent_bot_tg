@@ -12,9 +12,15 @@ def main(driver, URL, PAUSE_DURATION_SECONDS):
     # logger.info(f"Success: Подключились, начинаем парсить")
     sleep(PAUSE_DURATION_SECONDS)
 
-    # ad_all = driver.find_element(By.CLASS_NAME, "_93444fe79c--content--lXy9G") # Циклом проходим по каждому объявлению
+    article = driver.find_element(By.TAG_NAME, "article")
+    get_ad = article.find_element(By.XPATH, '//div[@data-name="LinkArea"]') # Циклом проходим по каждому объявлению
+    
+    # get_block = get_ad.find_element(By.CLASS_NAME, "_93444fe79c--content--lXy9G") # В каждом объявлении залетаем в тэг 'span'
+    # get_block_detal = get_block.find_element(By.CLASS_NAME, "_93444fe79c--general--BCXJ4") # В каждом объявлении залетаем в тэг 'span'
+    # get_href = get_block_detal.find_element(By.TAG_NAME, "a").get_attribute("href")
 
-    get_info_tag_span = driver.find_element(By.XPATH, "//*[@id='frontend-serp']/div/div[4]/article[1]/div[1]/div[2]/div[1]/div/div[1]/span/span") # В каждом объявлении залетаем в тэг 'span'
+
+    # get_href = get_block_detal.find_element(By.CSS_SELECTOR, "#frontend-serp > div > div._93444fe79c--wrapper--W0WqH > article:nth-child(1) > div._93444fe79c--card--ibP42 > div._93444fe79c--content--lXy9G > div._93444fe79c--general--BCXJ4 > div > a").get_attribute("href")
 
 
     # ad_text_href = ad_all.find_element(By.CLASS_NAME, 'iva-item-titleStep-pdebR')
@@ -39,7 +45,7 @@ def main(driver, URL, PAUSE_DURATION_SECONDS):
     #     'date_add':datetime.now()
     # } # Для удобства все собрали вместе
     # return dict_ad
-    print(get_info_tag_span)
+    print(get_ad)
     return
 
 def cian_main():
@@ -63,4 +69,20 @@ def cian_main():
     return text
 
 if __name__ == '__main__':
-   print(cian_main())
+    URL = 'https://samara.cian.ru/cat.php?currency=2&deal_type=rent&engine_version=2&maxprice=20000&offer_type=flat&region=4966&room1=1&room2=1&room9=1&sort=creation_date_desc&type=4'
+    PAUSE_DURATION_SECONDS = 5
+    try:
+        ua = dict(DesiredCapabilities.CHROME)
+        options = webdriver.ChromeOptions()
+        options.add_argument('headless')
+        options.add_argument('window-size=1920x935')
+        browser = webdriver.Chrome(chrome_options=options)
+
+        main(browser,URL,PAUSE_DURATION_SECONDS)
+        
+        # logger.info(f"Success: {text}")
+    except Exception as e:
+        print(e)
+        # logger.debug(f"Error: {e}")
+    finally:
+        browser.quit()

@@ -22,7 +22,7 @@ def main(driver, URL, PAUSE_DURATION_SECONDS):
 
     price = ad_all.find_element(By.CLASS_NAME, 'iva-item-priceStep-uq2CQ').text # Достаем цену
 
-    date = ad_all.find_element(By.CLASS_NAME, 'date-root-__9qz').text # Достаем дату публикации
+    # date = ad_all.find_element(By.CLASS_NAME, 'date-root-__9qz').text # Достаем дату публикации
 
     geo = ad_all.find_element(By.CLASS_NAME, 'iva-item-developmentNameStep-qPkq2').text # Достаем адрес
 
@@ -39,8 +39,8 @@ def main(driver, URL, PAUSE_DURATION_SECONDS):
 
 
 def avito_main():
-    URL = 'https://www.avito.ru/samara/kvartiry/sdam/na_dlitelnyy_srok-ASgBAgICAkSSA8gQ8AeQUg?f=ASgBAQECAkSSA8gQ8AeQUgFAzAg0kFmOWYxZAUXGmgwVeyJmcm9tIjowLCJ0byI6MjAwMDB9&i=1&localPriority=0&s=104&user=1'
-    PAUSE_DURATION_SECONDS = 181
+    URL = 'https://www.avito.ru/samara/kvartiry/sdam/na_dlitelnyy_srok-ASgBAgICAkSSA8gQ8AeQUg?district=794-795-796-797-798-799-801&f=ASgBAQECAkSSA8gQ8AeQUgFAzAg0kFmOWYxZAUXGmgwVeyJmcm9tIjowLCJ0byI6MjAwMDB9&i=1&s=104&user=1'
+    PAUSE_DURATION_SECONDS = 100
     try:
         ua = dict(DesiredCapabilities.CHROME)
         options = webdriver.ChromeOptions()
@@ -58,5 +58,5 @@ def avito_main():
         browser.quit()
     return text
 
-if __name__ == '__main__':
-   print(avito_main())
+# if __name__ == '__main__':
+#    print(avito_main())
