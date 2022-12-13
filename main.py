@@ -1,10 +1,9 @@
 from telebot import TeleBot
 from Module.avito import avito_main
-from datetime import datetime
 from loguru import logger
 import os
 
-bot = TeleBot('')
+bot = TeleBot('5976202984:AAHMn4Yhye3w-Mzvoombab0GuQw-Lpy-IdQ')
 
 @bot.message_handler(commands=['help'])
 def help(message):
@@ -27,13 +26,6 @@ def get_text_messages(message):
     bot.send_message(message.chat.id, 'Как появится новое объявление - дам знать')
     text = avito_main()
 
-    # new_dict = {
-    #     'name':'',
-    #     'href':'',
-    #     'price':'',
-    #     'geo':''
-    # }
-
     new_dict = text
 
     while True:
@@ -45,15 +37,17 @@ def get_text_messages(message):
                 text = avito_main()
                 continue
 
-            elif new_dict['href'] != text['href']:
+            else:
                 new_dict = text
                 logger.info(f"Check dict: new_dict != text")
                 markdown = f"""
 [{text['name']}]({text['href']})
 *{text['price']}*
+{text['deposit']}
 {text['geo']}
 """
-            bot.send_message(message.chat.id, markdown, parse_mode="Markdown", disable_notification=True)
+            # bot.send_message(message.chat.id, markdown, parse_mode="Markdown", disable_notification=True)
+            bot.send_photo(message.chat.id, text['photo'], "Markdown", disable_notification=True)
             logger.info(f"Success: Сообщение отправленно")
             text = avito_main()
             continue
