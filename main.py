@@ -41,13 +41,14 @@ def get_text_messages(message):
                 new_dict = text
                 logger.info(f"Check dict: new_dict != text")
                 markdown = f"""
+[ ]({text['photo']})
 [{text['name']}]({text['href']})
 *{text['price']}*
 {text['deposit']}
 {text['geo']}
 """
-            # bot.send_message(message.chat.id, markdown, parse_mode="Markdown", disable_notification=True)
-            bot.send_photo(message.chat.id, text['photo'], "Markdown", disable_notification=True)
+            bot.send_message(message.chat.id, markdown, parse_mode="Markdown", disable_notification=True)
+            # bot.send_photo(message.chat.id, text['photo'], caption="Markdown")
             logger.info(f"Success: Сообщение отправленно")
             text = avito_main()
             continue
